@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="dense_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="dense_tb" />
+            <top_module name="types" />
+            <top_module name="vcomponents" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="256.001 ns"></ZoomEndTime>
+      <Cursor1Time time="0.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="231"></NameColumnWidth>
+      <ValueColumnWidth column_width="97"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="/dense_tb/SysClk" type="logic">
+      <obj_property name="ElementShortName">SysClk</obj_property>
+      <obj_property name="ObjectShortName">SysClk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/start" type="logic">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/finished" type="logic">
+      <obj_property name="ElementShortName">finished</obj_property>
+      <obj_property name="ObjectShortName">finished</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/busy" type="logic">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/X" type="array">
+      <obj_property name="ElementShortName">X[1:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">X[1:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/Y" type="array">
+      <obj_property name="ElementShortName">Y[2:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">Y[2:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/C_CLOCK_PERIOD" type="other">
+      <obj_property name="ElementShortName">C_CLOCK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">C_CLOCK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/C_INPUT_WIDTH" type="other">
+      <obj_property name="ElementShortName">C_INPUT_WIDTH</obj_property>
+      <obj_property name="ObjectShortName">C_INPUT_WIDTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/C_NUM_NEURONS" type="other">
+      <obj_property name="ElementShortName">C_NUM_NEURONS</obj_property>
+      <obj_property name="ObjectShortName">C_NUM_NEURONS</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/layer_state" type="other">
+      <obj_property name="ElementShortName">layer_state</obj_property>
+      <obj_property name="ObjectShortName">layer_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/addr_rea" type="array">
+      <obj_property name="ElementShortName">addr_rea[3:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_rea[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/data_rea" type="array">
+      <obj_property name="ElementShortName">data_rea[17:0]</obj_property>
+      <obj_property name="ObjectShortName">data_rea[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/incr_addr" type="logic">
+      <obj_property name="ElementShortName">incr_addr</obj_property>
+      <obj_property name="ObjectShortName">incr_addr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/en_rea" type="logic">
+      <obj_property name="ElementShortName">en_rea</obj_property>
+      <obj_property name="ObjectShortName">en_rea</obj_property>
+   </wvobject>
+</wave_config>
