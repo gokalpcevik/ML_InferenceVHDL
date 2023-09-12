@@ -11,7 +11,7 @@ use xpm.vcomponents.all;
 entity dense is
     Generic(
         -- BRAM init file
-        MEM_FILE_NAME : STRING := "DENSE_0.mem";
+        WEIGHT_BIAS_MEMORY_FILE : STRING := "DENSE_0.mem";
         -- Layer properties
         INPUT_WIDTH : INTEGER := 8;
         NUM_NEURONS: INTEGER := 4;
@@ -77,7 +77,7 @@ begin
       ECC_MODE => "no_ecc",           -- No ECC for now
       ECC_TYPE => "none",             -- No ECC for now
       --IGNORE_INIT_SYNTH => 0,         -- Use both for sim. and synth.
-      MEMORY_INIT_FILE => MEM_FILE_NAME,  -- Init from generic param.
+      MEMORY_INIT_FILE => WEIGHT_BIAS_MEMORY_FILE,  -- Init from generic param.
       MEMORY_INIT_PARAM => "0",       -- String (no initialization through parameter, only from file)
       MEMORY_OPTIMIZATION => "true",  -- String
       MEMORY_PRIMITIVE => "block",    -- String(Weights and biases are generally large so block is more appropriate)

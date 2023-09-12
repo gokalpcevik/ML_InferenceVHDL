@@ -11,10 +11,10 @@ architecture testbench of dense_tb is
     CONSTANT C_NUM_NEURONS: INTEGER := 3;
 
     signal SysClk:   std_logic := '0';
-    signal resetn:   std_logic := '0';
-    signal start:    std_logic := '0';
-    signal finished: std_logic := '0';
-    signal busy:     std_logic := '0';
+    signal RESETN:   std_logic := '0';
+    signal START:    std_logic := '0';
+    signal FINISHED: std_logic := '0';
+    signal BUSY:     std_logic := '0';
 
     signal inputs: fixed_vector_t(C_INPUT_WIDTH - 1 downto 0) := (0=>to_fixed_t(1.0),1=>to_fixed_t(-0.5));
     signal activations: fixed_vector_t(C_NUM_NEURONS - 1 downto 0) := (others=>to_fixed_t(0.0));
@@ -24,21 +24,21 @@ begin
 
     process
       begin 
-        resetn <= '1' after 4 ns;
-        start <= '1' after 6 ns, '0' after 8.5 ns;
+        RESETN <= '1' after 4 ns;
+        START <= '1' after 6 ns, '0' after 8.5 ns;
         wait;
     end process;
 
     dense_inst: entity work.dense
       generic map (
-        MEM_FILE_NAME       => "test.mem",
-        INPUT_WIDTH         => C_INPUT_WIDTH,
-        NUM_NEURONS         => C_NUM_NEURONS,
-        ACTIVATION_FUNCTION => ReLU
+        WEIGHT_BIAS_MEMORY_FILE => "test.mem",
+        INPUT_WIDTH             => C_INPUT_WIDTH,
+        NUM_NEURONS             => C_NUM_NEURONS,
+        ACTIVATION_FUNCTION     => Linear
       )
       port map (
         SysClock    => SysClk,
-        RESETN      => resetn,
+        RESETN      => RESETN,
         START       => START,
         INPUTS      => INPUTS,
         ACTIVATIONS => ACTIVATIONS,

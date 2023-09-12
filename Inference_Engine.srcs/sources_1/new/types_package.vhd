@@ -4,15 +4,23 @@ use IEEE.NUMERIC_STD.ALL;
 use ieee.fixed_pkg.all;
 
 package types is
-    constant FP_WHOLE_BITS : integer := 2;
+    constant FP_INTEGER_BITS : integer := 2;
     constant FP_FRACTIONAL_BITS : integer := 15;
-    constant FP_TOTAL_WIDTH : integer := FP_WHOLE_BITS + FP_FRACTIONAL_BITS + 1;
+    constant FP_TOTAL_WIDTH : integer := FP_INTEGER_BITS + FP_FRACTIONAL_BITS + 1;
+    
+    /**********************************
+     **CFD MODEL SPECIFIC DEFINITIONS**
+     **********************************/
+    constant CFD_MODEL_INPUT_WIDTH: INTEGER := 8;
+    constant CFD_MODEL_L1_NUM_NEURONS: INTEGER := 15;
+    constant CFD_MODEL_L2_NUM_NEURONS: INTEGER := 15;
+    constant CFD_MODEL_L3_NUM_NEURONS: INTEGER := 4;
     
     -- ! Crashes Vivado XSim if used within vectors or matrices
-    subtype fixed_t is sfixed(FP_WHOLE_BITS downto -FP_FRACTIONAL_BITS);
+    subtype fixed_t is sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
     
-    type fixed_vector_t is array(natural range <>) of sfixed(FP_WHOLE_BITS downto -FP_FRACTIONAL_BITS);
-    type fixed_matrix_t is array(natural range <>,natural range <>) of sfixed(FP_WHOLE_BITS downto -FP_FRACTIONAL_BITS);
+    type fixed_vector_t is array(natural range <>) of sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
+    type fixed_matrix_t is array(natural range <>,natural range <>) of sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
 
     type activation_t is (ReLU, Linear);
     function to_fixed_t(q: real) return sfixed;
@@ -24,7 +32,7 @@ end package;
 package body types is
     function to_fixed_t(q: real) return sfixed is
     begin 
-        return to_sfixed(q,FP_WHOLE_BITS, -FP_FRACTIONAL_BITS);
+        return to_sfixed(q,FP_INTEGER_BITS, -FP_FRACTIONAL_BITS);
     end;
     -- * Borrowed from IEEE package float_generic
     function clog2(A: natural) return INTEGER is

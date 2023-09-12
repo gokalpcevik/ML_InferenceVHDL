@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl2008 xil_defaultlib  \
-"../../../../Inference_Engine.srcs/sources_1/new/types_package.vhd" \
-"../../../../Inference_Engine.srcs/sources_1/new/dense.vhd" \
-"../../../../Inference_Engine.srcs/sim_1/new/dense_tb.vhd" \
-
-# Do not sort compile order
-nosort
