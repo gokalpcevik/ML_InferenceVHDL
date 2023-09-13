@@ -4,9 +4,15 @@ use IEEE.NUMERIC_STD.ALL;
 use ieee.fixed_pkg.all;
 
 package types is
-    constant FP_INTEGER_BITS : integer := 2;
-    constant FP_FRACTIONAL_BITS : integer := 15;
-    constant FP_TOTAL_WIDTH : integer := FP_INTEGER_BITS + FP_FRACTIONAL_BITS + 1;
+    constant FP_INTEGER_BITS:    INTEGER := 2;
+    constant FP_FRACTIONAL_BITS: INTEGER := 15;
+    constant FP_TOTAL_WIDTH:     INTEGER := FP_INTEGER_BITS + FP_FRACTIONAL_BITS + 1;
+    
+    constant FP_MUL_LEFT_INDEX:  INTEGER := 2 * FP_INTEGER_BITS + 1;
+    constant FP_MUL_RIGHT_INDEX: INTEGER := -2 * FP_FRACTIONAL_BITS;
+    
+    constant FP_ADD_LEFT_INDEX:  INTEGER := FP_INTEGER_BITS + 1;
+    constant FP_ADD_RIGHT_INDEX: INTEGER := -FP_FRACTIONAL_BITS;
     
     /**********************************
      **CFD MODEL SPECIFIC DEFINITIONS**
@@ -22,8 +28,12 @@ package types is
     type fixed_vector_t is array(natural range <>) of sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
     type fixed_matrix_t is array(natural range <>,natural range <>) of sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
 
+    type fixed_mul_vector_t is array(natural range<>) of sfixed(FP_MUL_LEFT_INDEX downto FP_MUL_RIGHT_INDEX);
+    type fixed_add_vector_t is array(natural range<>) of sfixed(FP_ADD_LEFT_INDEX downto FP_ADD_RIGHT_INDEX);
+
     type activation_t is (ReLU, Linear);
     function to_fixed_t(q: real) return sfixed;
+    function to_fixed_mul_t(q: real) return sfixed;
 
     function clog2 (A : NATURAL) return INTEGER;
 
@@ -34,6 +44,12 @@ package body types is
     begin 
         return to_sfixed(q,FP_INTEGER_BITS, -FP_FRACTIONAL_BITS);
     end;
+
+    function to_fixed_mul_t(q: real) return sfixed is
+    begin 
+        return to_sfixed(q, FP_MUL_LEFT_INDEX, FP_MUL_RIGHT_INDEX);
+    end;
+
     -- * Borrowed from IEEE package float_generic
     function clog2(A: natural) return INTEGER is
         variable Y : REAL;

@@ -39,17 +39,21 @@ architecture RTL of dense is
     -- ! Do not change this
     CONSTANT C_READ_LATENCY: INTEGER := 2;
 
-    type layer_state_t is (LAYER_IDLE, LAYER_MUL, LAYER_BIAS, LAYER_ACTIVATION, LAYER_OUTPUT);
+    type layer_state_t is (LAYER_IDLE, LAYER_MUL, LAYER_MUL_BUF, LAYER_BIAS, LAYER_ACTIVATION, LAYER_OUTPUT);
     signal layer_state: layer_state_t := LAYER_IDLE;    
 
     -- * Input and Output for this layer(buffered)
     signal X: fixed_vector_t(INPUT_WIDTH - 1 downto 0);
     signal Y: fixed_vector_t(NUM_NEURONS - 1 downto 0);
 
+    signal Y_YPXDATA: fixed_mul_vector_t(NUM_NEURONS - 1 downto 0);
+
     -- * Read Enable | Port A
     signal en_rea: std_logic := '0';
     signal addr_rea: std_logic_vector(C_READ_ADDR_WIDTH - 1 downto 0) := (others=>'0');
-    signal data_rea: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    signal data_rea0: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    signal data_rea1: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    signal data_rea2: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
     signal incr_addr: std_logic := '0';
 
     -- * Start SR signals
@@ -94,7 +98,7 @@ begin
       WAKEUP_TIME => "disable_sleep"  -- String
    )
    port map (
-      douta => data_rea,     -- READ_DATA_WIDTH_A-bit output: Data output for port A read operations.
+      douta => data_rea0,     -- READ_DATA_WIDTH_A-bit output: Data output for port A read operations.
       addra => addr_rea,     -- ADDR_WIDTH_A-bit input: Address for port A read operations.
       clka => SysClock,            -- 1-bit input: Clock signal for port A.
       ena => en_rea,        /* 1-bit input: Memory enable signal for port A. Must be high on clock
@@ -150,6 +154,9 @@ begin
                     addr_rea <= std_logic_vector(unsigned(addr_rea) + 1);
                 end if;
 
+                data_rea1 <= data_rea0;
+                data_rea2 <= data_rea1;
+
                 case layer_state is
                 when LAYER_IDLE =>
                     FINISHED <= '0';
@@ -169,14 +176,20 @@ begin
                         -- * Reset the neuron and weight sel. index. It'll start from 0,0
                         NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
                         WEIGHT_SELECT <= to_unsigned(0,WEIGHT_SELECT'length);
-                        -- * Reset the Y vector for accumulation
-                        Y <= (others=>to_fixed_t(0.0));
+                        Y_YPXDATA <= (others=>to_fixed_mul_t(0.0));
                         layer_state <= LAYER_MUL;
                     end if;
                 when LAYER_MUL =>
                     -- * Accumulate(dot prod.) in the Y vector
                     -- * Y(i) = Y(i) + X(i) * W_i (i = 0 ... INPUT_WIDTH - 1)
-                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + resize(X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea,fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low);
+                    -- MUL_BUFFER(to_integer(NEURON_SELECT)) <= resize(MUL_BUFFER(to_integer(NEURON_SELECT)) + resize(X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0,-- fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low);
+                    Y_YPXDATA(to_integer(NEURON_SELECT)) <= 
+                        resize(
+                            Y_YPXDATA(to_integer(NEURON_SELECT)) 
+                            +
+                            -- X * data 
+                            X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0, fixed_t'high, fixed_t'low),
+                            FP_MUL_LEFT_INDEX, FP_MUL_RIGHT_INDEX);
 
                     if WEIGHTS_EXH = '1' then
                         WEIGHT_SELECT <= to_unsigned(0, WEIGHT_SELECT'length);
@@ -186,14 +199,20 @@ begin
                     end if;
 
                     if NEURONS_EXH = '1' AND WEIGHTS_EXH = '1' then
-                        layer_state <= LAYER_BIAS;
-                        -- Reset the neuron selection index for bias
-                        NEURON_SELECT <= to_unsigned(0, NEURON_SELECT'length);
+                        layer_state <= LAYER_MUL_BUF;
                     end if;
+                when LAYER_MUL_BUF =>
+
+                    for i in 0 to NUM_NEURONS - 1 loop
+                        Y(i) <= resize(Y_YPXDATA(i), fixed_t'high, fixed_t'low);
+                    end loop;
+                    
+                    layer_state <= LAYER_BIAS;
+                    NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
 
                 when LAYER_BIAS =>
                     -- * Add the bias to the mul. output
-                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + to_sfixed(data_rea,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
+                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + to_sfixed(data_rea1,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
 
                     -- * If input sel. is exhausted(reached max index) switch to next layer
                     if NEURONS_EXH = '1' then
@@ -254,6 +273,9 @@ begin
                     addr_rea <= std_logic_vector(unsigned(addr_rea) + 1);
                 end if;
 
+                data_rea1 <= data_rea0;
+                data_rea2 <= data_rea1;
+
                 case layer_state is
                 when LAYER_IDLE =>
                     FINISHED <= '0';
@@ -273,14 +295,20 @@ begin
                         -- * Reset the neuron and weight sel. index. It'll start from 0,0
                         NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
                         WEIGHT_SELECT <= to_unsigned(0,WEIGHT_SELECT'length);
-                        -- * Reset the Y vector for accumulation
-                        Y <= (others=>to_fixed_t(0.0));
+                        Y_YPXDATA <= (others=>to_fixed_mul_t(0.0));
                         layer_state <= LAYER_MUL;
                     end if;
                 when LAYER_MUL =>
-                    -- * Accumulate(dot prod.) in the Y vector
+                     -- * Accumulate(dot prod.) in the Y vector
                     -- * Y(i) = Y(i) + X(i) * W_i (i = 0 ... INPUT_WIDTH - 1)
-                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + resize(X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea,fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low);
+                    -- MUL_BUFFER(to_integer(NEURON_SELECT)) <= resize(MUL_BUFFER(to_integer(NEURON_SELECT)) + resize(X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0,-- fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low);
+                    Y_YPXDATA(to_integer(NEURON_SELECT)) <= 
+                        resize(
+                            Y_YPXDATA(to_integer(NEURON_SELECT)) 
+                            +
+                            -- X * data 
+                            X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0, fixed_t'high, fixed_t'low),
+                            FP_MUL_LEFT_INDEX, FP_MUL_RIGHT_INDEX);
 
                     if WEIGHTS_EXH = '1' then
                         WEIGHT_SELECT <= to_unsigned(0, WEIGHT_SELECT'length);
@@ -290,19 +318,22 @@ begin
                     end if;
 
                     if NEURONS_EXH = '1' AND WEIGHTS_EXH = '1' then
-                        layer_state <= LAYER_BIAS;
-                        -- Reset the neuron selection index for bias
-                        NEURON_SELECT <= to_unsigned(0, NEURON_SELECT'length);
+                        layer_state <= LAYER_MUL_BUF;
                     end if;
+                when LAYER_MUL_BUF =>
+                    
+                    for i in 0 to NUM_NEURONS - 1 loop
+                        Y(i) <= resize(Y_YPXDATA(i), fixed_t'high, fixed_t'low);
+                    end loop;
+                    layer_state <= LAYER_BIAS;
+                    NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
 
                 when LAYER_BIAS =>
                     -- * Add the bias to the mul. output
-                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + to_sfixed(data_rea,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
+                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + to_sfixed(data_rea1,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
 
                     -- * If input sel. is exhausted(reached max index) switch to next layer
                     if NEURONS_EXH = '1' then
-                        -- * Reset the neuron selection index for activation
-                        NEURON_SELECT <= to_unsigned(0, NEURON_SELECT'length);
                         -- * Disable increment addr.
                         incr_addr <= '0';
                         -- * Disable read ROM

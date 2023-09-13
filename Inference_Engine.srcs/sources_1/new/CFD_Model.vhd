@@ -55,6 +55,7 @@ begin
     if rising_edge(SysCLK) then
       if RESETN = '0' then
       else
+        FINISHED <= L3_FINISHED;
         if L3_FINISHED = '1' then
           OUTPUT <= L3_Y;
         end if;
