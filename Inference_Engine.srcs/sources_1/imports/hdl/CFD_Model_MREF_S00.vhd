@@ -18,7 +18,6 @@ entity CFD_Model_MREF_S00 is
 	);
 	port (
 		-- Users to add ports here
-
 		-- User ports ends
 		-- Do not modify the ports beyond this line
 
@@ -137,7 +136,7 @@ architecture RTL of CFD_Model_MREF_S00 is
 	signal AXI_Y3:  std_logic_vector(C_S_AXI_DATA_WIDTH - 1 downto 0);
 
 	signal X: fixed_vector_t(CFD_MODEL_INPUT_WIDTH - 1 downto 0);
-	signal Y: fixed_vector_t(CFD_MODEL_L3_NUM_NEURONS - 1 downto 0);
+	signal PRED_Y: fixed_vector_t(CFD_MODEL_L3_NUM_NEURONS - 1 downto 0);
 	signal finished: std_logic;
 	signal busy: std_logic;
 	signal start: std_logic;
@@ -527,9 +526,12 @@ begin
 	  end if;
 	end process;
 
+	
+
 	-- Add user logic here
-		process (CTRL_REG) 
+		process (S_AXI_ACLK) 
 		begin
+			if rising_edge(S_AXI_ACLK) then
 				if S_AXI_ARESETN = '0' then
 					start <= '0';
 				else
@@ -539,25 +541,26 @@ begin
 
 					if CTRL_REG(0) = '1' then
 						X <= (
-								resize(sfixed(X1_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X0_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X2_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X3_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X4_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X5_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X6_REG), fixed_t'high, fixed_t'low),
-								resize(sfixed(X7_REG), fixed_t'high, fixed_t'low)
+								resize(to_sfixed(X0_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X1_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X2_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X3_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X4_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X5_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X6_REG,16,-15), fixed_t'high, fixed_t'low),
+								resize(to_sfixed(X7_REG,16,-15), fixed_t'high, fixed_t'low)
 							);
 					end if;
 
 					if finished = '1' then
-						AXI_Y0 <= to_slv(resize(Y(0), 16, -15));
-						AXI_Y1 <= to_slv(resize(Y(1), 16, -15));
-						AXI_Y2 <= to_slv(resize(Y(2), 16, -15));
-						AXI_Y3 <= to_slv(resize(Y(3), 16, -15));
+						AXI_Y0 <= to_slv(resize(PRED_Y(0), 16, -15));
+						AXI_Y1 <= to_slv(resize(PRED_Y(1), 16, -15));
+						AXI_Y2 <= to_slv(resize(PRED_Y(2), 16, -15));
+						AXI_Y3 <= to_slv(resize(PRED_Y(3), 16, -15));
 					end if;
 	
 				end if;
+			end if;
 		end process;
 
 		cfd_model_inst: entity work.CFD_Model
@@ -571,7 +574,7 @@ begin
 			RESETN   => S_AXI_ARESETN,
 			START    => START,
 			INPUTS   => X,
-			OUTPUT   => Y,
+			OUTPUT   => PRED_Y,
 			FINISHED => finished,
 			BUSY     => busy
 		  );
