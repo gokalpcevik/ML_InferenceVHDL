@@ -16,10 +16,9 @@ entity CFD_Model_MREF is
 	);
 	port (
 		-- Users to add ports here
-
+		pred_irq: out std_logic;
 		-- User ports ends
 		-- Do not modify the ports beyond this line
-
 
 		-- Ports of Axi Slave Bus Interface S00_AXI
 		s00_axi_aclk	: in std_logic;
@@ -48,7 +47,12 @@ end CFD_Model_MREF;
 
 architecture RTL of CFD_Model_MREF is
 
+	ATTRIBUTE X_INTERFACE_INFO      :STRING;
+	ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
 	
+	ATTRIBUTE X_INTERFACE_INFO of pred_irq :SIGNAL is "xilinx.com:signal:interrupt:1.0 pred_irq INTERRUPT";
+	ATTRIBUTE X_INTERFACE_PARAMETER of pred_irq: SIGNAL is "SENSITIVITY EDGE_RISING";
+
 
 	-- component declaration
 	component CFD_Model_MREF_S00 is
@@ -57,6 +61,7 @@ architecture RTL of CFD_Model_MREF is
 		C_S_AXI_ADDR_WIDTH	: integer	:= 6
 		);
 		port (
+		pred_finished: out std_logic;
 		S_AXI_ACLK	: in std_logic;
 		S_AXI_ARESETN	: in std_logic;
 		S_AXI_AWADDR	: in std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
@@ -90,6 +95,7 @@ CFD_AI_MB_v1_0_S00_AXI_inst : CFD_Model_MREF_S00
 		C_S_AXI_ADDR_WIDTH	=> C_S00_AXI_ADDR_WIDTH
 	)
 	port map (
+		pred_finished => pred_irq,
 		S_AXI_ACLK	=> s00_axi_aclk,
 		S_AXI_ARESETN	=> s00_axi_aresetn,
 		S_AXI_AWADDR	=> s00_axi_awaddr,

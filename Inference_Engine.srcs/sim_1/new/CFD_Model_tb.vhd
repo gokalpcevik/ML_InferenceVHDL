@@ -14,7 +14,7 @@ architecture testbench of CFD_Model_tb is
     signal FINISHED: std_logic := '0';
     signal BUSY:     std_logic := '0';
 
-    signal INPUTS:      fixed_vector_t(CFD_MODEL_INPUT_WIDTH - 1 downto 0)  := (others=>to_fixed_t(0.5));
+    signal INPUTS:      fixed_vector_t(CFD_MODEL_INPUT_WIDTH - 1 downto 0)  := (others=>to_fixed_t(1.0));
     signal PRED_OUTPUT: fixed_vector_t(CFD_MODEL_L3_NUM_NEURONS - 1 downto 0) := (others=>to_fixed_t(0.0));
 
 begin

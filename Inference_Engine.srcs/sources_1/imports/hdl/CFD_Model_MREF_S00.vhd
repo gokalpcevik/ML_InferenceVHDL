@@ -18,6 +18,7 @@ entity CFD_Model_MREF_S00 is
 	);
 	port (
 		-- Users to add ports here
+		pred_finished: out std_logic;
 		-- User ports ends
 		-- Do not modify the ports beyond this line
 
@@ -526,7 +527,10 @@ begin
 	  end if;
 	end process;
 
-	
+	process(FINISHED) 
+	begin
+		pred_finished <= FINISHED;
+	end process;
 
 	-- Add user logic here
 		process (S_AXI_ACLK) 

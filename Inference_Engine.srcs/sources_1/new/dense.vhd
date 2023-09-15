@@ -1,12 +1,21 @@
+-- Standard
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
+
 -- Local fixed package(vectors, matrices, etc.)
 use WORK.TYPES.ALL;
 use IEEE.fixed_pkg.ALL;
+
 -- For BRAM
 Library xpm;
 use xpm.vcomponents.all;
+
+-- DSP Macro
+Library UNISIM;
+use UNISIM.vcomponents.all;
+Library UNIMACRO;
+use UNIMACRO.vcomponents.all;
 
 entity dense is
     Generic(
@@ -32,12 +41,16 @@ end dense;
 
 architecture RTL of dense is
 
-    -- Memory size in bits (for BRAM)
+    -- * Memory 
     CONSTANT C_MEMORY_SIZE:     INTEGER := NUM_NEURONS * INPUT_WIDTH * FP_TOTAL_WIDTH + NUM_NEURONS * FP_TOTAL_WIDTH;
     CONSTANT C_READ_DATA_WIDTH: INTEGER := FP_TOTAL_WIDTH;
     CONSTANT C_READ_ADDR_WIDTH: INTEGER := clog2(C_MEMORY_SIZE/C_READ_DATA_WIDTH);
     -- ! Do not change this
     CONSTANT C_READ_LATENCY: INTEGER := 2;
+    -- * DSP
+    CONSTANT C_DSP_INPUT_WIDTH_A: INTEGER := 18;
+    CONSTANT C_DSP_INPUT_WIDTH_B: INTEGER := 18;
+    CONSTANT C_DSP_OUTPUT_WIDTH: INTEGER := 48;
 
     type layer_state_t is (LAYER_IDLE, LAYER_MUL, LAYER_MUL_BUF, LAYER_BIAS, LAYER_ACTIVATION, LAYER_OUTPUT);
     signal layer_state: layer_state_t := LAYER_IDLE;    
@@ -55,6 +68,15 @@ architecture RTL of dense is
     signal data_rea1: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
     signal data_rea2: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
     signal incr_addr: std_logic := '0';
+
+    -- * DSP
+    signal dsp_rst: std_logic := '0';
+    signal dsp_clock_en: std_logic := '0';
+    signal dsp_load: std_logic := '0';
+    signal dsp_input_a: std_logic_vector(C_DSP_INPUT_WIDTH_A - 1 downto 0)  := to_slv(to_fixed_t(0.0));
+    signal dsp_input_b: std_logic_vector(C_DSP_INPUT_WIDTH_B - 1 downto 0)  := to_slv(to_fixed_t(0.0));
+    signal dsp_output_p: std_logic_vector(C_DSP_OUTPUT_WIDTH - 1 downto 0)  := to_slv(to_fixed_t(0.0));
+    signal dsp_load_data: std_logic_vector(C_DSP_OUTPUT_WIDTH - 1 downto 0) := to_slv(to_sfixed(0.0,FP_MUL_LEFT_INDEX,FP_MUL_RIGHT_INDEX));
 
     -- * Start SR signals
     signal start1: std_logic := '0';
@@ -111,6 +133,28 @@ begin
                               -- by parameter READ_RESET_VALUE_A.
       sleep => '1'            -- 1-bit input: sleep signal to enable the dynamic power saving feature.(tie to '1' if unused)
    );
+
+
+   /* MACC_MACRO_inst : MACC_MACRO
+   generic map (
+      DEVICE => "7SERIES",  -- Target Device: "VIRTEX5", "7SERIES", "SPARTAN6" 
+      LATENCY => 2,         -- Desired clock cycle latency, 1-4
+      WIDTH_A => C_DSP_INPUT_WIDTH_A,        -- Multiplier A-input bus width, 1-25
+      WIDTH_B => C_DSP_INPUT_WIDTH_B,        -- Multiplier B-input bus width, 1-18     
+      WIDTH_P => C_DSP_OUTPUT_WIDTH)        -- Accumulator output bus width, 1-48
+   port map (
+      P => dsp_output_p,     -- MACC output bus, width determined by WIDTH_P generic 
+      A => dsp_input_a,     -- MACC input A bus, width determined by WIDTH_A generic 
+      ADDSUB => '1', -- 1-bit add/sub input, high selects add, low selects subtract
+      B => dsp_input_b,           -- MACC input B bus, width determined by WIDTH_B generic 
+      CARRYIN => '0', -- 1-bit carry-in input to accumulator
+      CE => dsp_clock_en,      -- 1-bit active high input clock enable
+      CLK => SysClock,    -- 1-bit positive edge clock input
+      LOAD => dsp_load, -- 1-bit active high input load accumulator enable
+      LOAD_DATA => dsp_load_data, -- Load accumulator input data, 
+                              -- width determined by WIDTH_P generic
+      RST => dsp_rst    -- 1-bit input active high reset
+   ); */
 
     -- * I/O
     BUSY <= S_BUSY;

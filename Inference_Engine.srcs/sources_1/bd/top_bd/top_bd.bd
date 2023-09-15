@@ -18,6 +18,7 @@
         }
       },
       "rst_ps7_0_50M": "",
+      "xlconcat_0": "",
       "CFD_Model_AI": ""
     },
     "interface_ports": {
@@ -284,6 +285,12 @@
           "PCW_CLK3_FREQ": {
             "value": "10000000"
           },
+          "PCW_CORE0_FIQ_INTR": {
+            "value": "0"
+          },
+          "PCW_CORE0_IRQ_INTR": {
+            "value": "0"
+          },
           "PCW_CPU_CPU_6X4X_MAX_RANGE": {
             "value": "667"
           },
@@ -381,6 +388,9 @@
             "value": "0"
           },
           "PCW_I2C_RESET_ENABLE": {
+            "value": "1"
+          },
+          "PCW_IRQ_F2P_INTR": {
             "value": "1"
           },
           "PCW_IRQ_F2P_MODE": {
@@ -1202,6 +1212,9 @@
           "PCW_USE_CROSS_TRIGGER": {
             "value": "0"
           },
+          "PCW_USE_FABRIC_INTERRUPT": {
+            "value": "1"
+          },
           "PCW_USE_M_AXI_GP0": {
             "value": "1"
           }
@@ -1556,6 +1569,17 @@
         "xci_path": "ip\\top_bd_rst_ps7_0_50M_0\\top_bd_rst_ps7_0_50M_0.xci",
         "inst_hier_path": "rst_ps7_0_50M"
       },
+      "xlconcat_0": {
+        "vlnv": "xilinx.com:ip:xlconcat:2.1",
+        "xci_name": "top_bd_xlconcat_0_0",
+        "xci_path": "ip\\top_bd_xlconcat_0_0\\top_bd_xlconcat_0_0.xci",
+        "inst_hier_path": "xlconcat_0",
+        "parameters": {
+          "NUM_PORTS": {
+            "value": "1"
+          }
+        }
+      },
       "CFD_Model_AI": {
         "vlnv": "xilinx.com:module_ref:CFD_Model_MREF:1.0",
         "xci_name": "top_bd_CFD_Model_MREF_0_0",
@@ -1781,6 +1805,20 @@
           }
         },
         "ports": {
+          "pred_irq": {
+            "type": "intr",
+            "direction": "O",
+            "parameters": {
+              "SENSITIVITY": {
+                "value": "EDGE_RISING",
+                "value_src": "constant"
+              },
+              "PortWidth": {
+                "value": "1",
+                "value_src": "default_prop"
+              }
+            }
+          },
           "s00_axi_aclk": {
             "type": "clk",
             "direction": "I",
@@ -1843,6 +1881,12 @@
       }
     },
     "nets": {
+      "CFD_Model_AI_pred_irq": {
+        "ports": [
+          "CFD_Model_AI/pred_irq",
+          "xlconcat_0/In0"
+        ]
+      },
       "processing_system7_0_FCLK_CLK0": {
         "ports": [
           "processing_system7_0/FCLK_CLK0",
@@ -1867,6 +1911,12 @@
           "ps7_0_axi_periph/M00_ARESETN",
           "ps7_0_axi_periph/ARESETN",
           "CFD_Model_AI/s00_axi_aresetn"
+        ]
+      },
+      "xlconcat_0_dout": {
+        "ports": [
+          "xlconcat_0/dout",
+          "processing_system7_0/IRQ_F2P"
         ]
       }
     },
