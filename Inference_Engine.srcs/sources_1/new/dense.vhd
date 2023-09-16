@@ -51,40 +51,52 @@ architecture RTL of dense is
     CONSTANT C_DSP_INPUT_WIDTH_A: INTEGER := 18;
     CONSTANT C_DSP_INPUT_WIDTH_B: INTEGER := 18;
     CONSTANT C_DSP_OUTPUT_WIDTH: INTEGER := 48;
+    -- ! Do not change
+    CONSTANT C_DSP_LATENCY: INTEGER := 3;
 
-    type layer_state_t is (LAYER_IDLE, LAYER_MUL, LAYER_MUL_BUF, LAYER_BIAS, LAYER_ACTIVATION, LAYER_OUTPUT);
+    type layer_state_t is (LAYER_IDLE, LAYER_WX, LAYER_WX_RESIZE, LAYER_BIAS, LAYER_ACTIVATION, LAYER_OUTPUT);
     signal layer_state: layer_state_t := LAYER_IDLE;    
 
-    -- * Input and Output for this layer(buffered)
-    signal X: fixed_vector_t(INPUT_WIDTH - 1 downto 0);
-    signal Y: fixed_vector_t(NUM_NEURONS - 1 downto 0);
+    -- * Input and Output for this layer
+    signal input_buf: fixed_vector_t(INPUT_WIDTH - 1 downto 0);
+    signal activation_buf: fixed_vector_t(NUM_NEURONS - 1 downto 0);
 
-    signal Y_YPXDATA: fixed_mul_vector_t(NUM_NEURONS - 1 downto 0);
+    signal m: sfixed(fixedm_t'high downto fixedm_t'low) := to_fixed_mul_t(0.0);
+
+    signal Y_YPXW: fixed_mul_vector_t(NUM_NEURONS - 1 downto 0);
 
     -- * Read Enable | Port A
     signal en_rea: std_logic := '0';
     signal addr_rea: std_logic_vector(C_READ_ADDR_WIDTH - 1 downto 0) := (others=>'0');
-    signal data_rea0: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
-    signal data_rea1: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
-    signal data_rea2: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    
+    signal data_rd0: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    signal data_rd1: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    signal data_rd2: std_logic_vector(C_READ_DATA_WIDTH - 1 downto 0) := (others=>'0');
+    
     signal incr_addr: std_logic := '0';
 
     -- * DSP
-    signal dsp_rst: std_logic := '0';
-    signal dsp_clock_en: std_logic := '0';
-    signal dsp_load: std_logic := '0';
-    signal dsp_input_a: std_logic_vector(C_DSP_INPUT_WIDTH_A - 1 downto 0)  := to_slv(to_fixed_t(0.0));
-    signal dsp_input_b: std_logic_vector(C_DSP_INPUT_WIDTH_B - 1 downto 0)  := to_slv(to_fixed_t(0.0));
-    signal dsp_output_p: std_logic_vector(C_DSP_OUTPUT_WIDTH - 1 downto 0)  := to_slv(to_fixed_t(0.0));
-    signal dsp_load_data: std_logic_vector(C_DSP_OUTPUT_WIDTH - 1 downto 0) := to_slv(to_sfixed(0.0,FP_MUL_LEFT_INDEX,FP_MUL_RIGHT_INDEX));
+    -- signal dsp_rst: std_logic := '0';
+    -- signal dsp_clock_en: std_logic := '0';
+    -- signal dsp_load: std_logic := '0';
+    -- signal dsp_input_a: std_logic_vector(C_DSP_INPUT_WIDTH_A - 1 downto 0)  := to_slv(to_fixed_t(0.0));
+    -- signal dsp_input_b: std_logic_vector(C_DSP_INPUT_WIDTH_B - 1 downto 0)  := to_slv(to_fixed_t(0.0));
+    -- signal dsp_output_p: std_logic_vector(C_DSP_OUTPUT_WIDTH - 1 downto 0)  := to_slv(to_fixed_t(0.0));
+    -- signal dsp_load_data: std_logic_vector(C_DSP_OUTPUT_WIDTH - 1 downto 0) := to_slv(to_sfixed(0.0,FP_MUL_LEFT_INDEX,FP_MUL_RIGHT_INDEX));
 
     -- * Start SR signals
     signal start1: std_logic := '0';
     signal start2: std_logic := '0';
+    signal start3: std_logic := '0';
 
     -- * Signals to select elements from the weight matrix(or bias vector) and inputs
-    signal NEURON_SELECT: unsigned(5 downto 0) := to_unsigned(0,6);
-    signal WEIGHT_SELECT: unsigned(5 downto 0) := to_unsigned(0,6);
+    signal NRN_SEL0: unsigned(5 downto 0) := to_unsigned(0,6);
+    signal NRN_SEL1: unsigned(5 downto 0) := to_unsigned(0,6);
+    
+    signal W_SEL0: unsigned(5 downto 0) := to_unsigned(0,6);
+    signal W_SEL1: unsigned(5 downto 0) := to_unsigned(0,6);
+
+    signal sw_resize: std_logic := '0';
 
     -- * Asserted when XXXX_SELECT has reached the maximum index in bounds
     signal WEIGHTS_EXH: std_logic := '0'; 
@@ -120,7 +132,7 @@ begin
       WAKEUP_TIME => "disable_sleep"  -- String
    )
    port map (
-      douta => data_rea0,     -- READ_DATA_WIDTH_A-bit output: Data output for port A read operations.
+      douta => data_rd0,     -- READ_DATA_WIDTH_A-bit output: Data output for port A read operations.
       addra => addr_rea,     -- ADDR_WIDTH_A-bit input: Address for port A read operations.
       clka => SysClock,            -- 1-bit input: Clock signal for port A.
       ena => en_rea,        /* 1-bit input: Memory enable signal for port A. Must be high on clock
@@ -135,10 +147,10 @@ begin
    );
 
 
-   /* MACC_MACRO_inst : MACC_MACRO
+    /* MACC_MACRO_inst : MACC_MACRO
    generic map (
       DEVICE => "7SERIES",  -- Target Device: "VIRTEX5", "7SERIES", "SPARTAN6" 
-      LATENCY => 2,         -- Desired clock cycle latency, 1-4
+      LATENCY => C_DSP_LATENCY,         -- Desired clock cycle latency, 1-4
       WIDTH_A => C_DSP_INPUT_WIDTH_A,        -- Multiplier A-input bus width, 1-25
       WIDTH_B => C_DSP_INPUT_WIDTH_B,        -- Multiplier B-input bus width, 1-18     
       WIDTH_P => C_DSP_OUTPUT_WIDTH)        -- Accumulator output bus width, 1-48
@@ -160,10 +172,10 @@ begin
     BUSY <= S_BUSY;
 
     -- * Index exhaustion logic
-    process(WEIGHT_SELECT, NEURON_SELECT)
+    process(W_SEL0, NRN_SEL0)
     begin 
-        WEIGHTS_EXH <= '1' when (WEIGHT_SELECT) = (INPUT_WIDTH - 1) else '0';
-        NEURONS_EXH <= '1' when (NEURON_SELECT) = (NUM_NEURONS - 1) else '0';
+        WEIGHTS_EXH <= '1' when (W_SEL0) = (INPUT_WIDTH - 1) else '0';
+        NEURONS_EXH <= '1' when (NRN_SEL0) = (NUM_NEURONS - 1) else '0';
     end process;
 
     -- * Start SR
@@ -173,10 +185,10 @@ begin
             if RESETN = '1' then
                 start1 <= start;
                 start2 <= start1;    
+                start3 <= start2;
             end if;
         end if;
     end process;
-
     -- * Generate master execution logic according to the activation function
     -- TODO: This code needs to be (almost)halved but I don't know how without case generation
     MASTER_EXEC_gen_act: case (ACTIVATION_FUNCTION) generate
@@ -188,6 +200,7 @@ begin
     
     MASTER_EXEC_proc: process(SysClock)
     begin
+
         if rising_edge(SysClock) then
             if RESETN = '0' then
                 layer_state <= LAYER_IDLE;
@@ -198,70 +211,81 @@ begin
                     addr_rea <= std_logic_vector(unsigned(addr_rea) + 1);
                 end if;
 
-                data_rea1 <= data_rea0;
-                data_rea2 <= data_rea1;
+                -- * Read data SR logic
+                data_rd1 <= data_rd0;
+                data_rd2 <= data_rd1;
+
+                -- * Weight&Neuron selection SR logic
+                W_SEL1 <= W_SEL0;
+                NRN_SEL1 <= NRN_SEL0;
 
                 case layer_state is
                 when LAYER_IDLE =>
                     FINISHED <= '0';
+
                     if (start = '1') and (S_BUSY = '0') then
                         S_BUSY <= '1';
                         -- * Reset the address to 0
                         addr_rea <= (others=>'0');
                         -- * Input buffer
-                        X <= INPUTS;
+                        input_buf <= INPUTS;
                         -- * Enable read ROM for port A
                         en_rea <= '1';
                         -- * Start incrementing the address
                         incr_addr <= '1';
+                        -- * Reset weight selection because we need for start3
+                        W_SEL0 <= to_unsigned(0, W_SEL0'length);
+                        NRN_SEL0 <= to_unsigned(0, NRN_SEL0'length);
                     end if;
-                    -- * 2 cycles after en_rea is asserted, switch to mult. state.(BROM latency is 2, fixed for now)
-                    if start2 = '1' then
-                        -- * Reset the neuron and weight sel. index. It'll start from 0,0
-                        NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
-                        WEIGHT_SELECT <= to_unsigned(0,WEIGHT_SELECT'length);
-                        Y_YPXDATA <= (others=>to_fixed_mul_t(0.0));
-                        layer_state <= LAYER_MUL;
-                    end if;
-                when LAYER_MUL =>
-                    -- * Accumulate(dot prod.) in the Y vector
-                    -- * Y(i) = Y(i) + X(i) * W_i (i = 0 ... INPUT_WIDTH - 1)
-                    -- MUL_BUFFER(to_integer(NEURON_SELECT)) <= resize(MUL_BUFFER(to_integer(NEURON_SELECT)) + resize(X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0,-- fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low);
-                    Y_YPXDATA(to_integer(NEURON_SELECT)) <= 
-                        resize(
-                            Y_YPXDATA(to_integer(NEURON_SELECT)) 
-                            +
-                            -- X * data 
-                            X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0, fixed_t'high, fixed_t'low),
-                            FP_MUL_LEFT_INDEX, FP_MUL_RIGHT_INDEX);
 
+                    if (start3 = '1') and (S_BUSY = '1') then
+                        -- * Reset accumulation buffer
+                        Y_YPXW <= (others=>to_fixed_mul_t(0.0));
+                        m <= to_sfixed(data_rd0, fixed_t'high, fixed_t'low) * input_buf(to_integer(W_SEL0));
+                        -- * Increase weight selection for the next calculation
+                        W_SEL0 <= W_SEL0 + 1;
+                        sw_resize <= '0';
+                        -- * Switch to next state
+                        layer_state <= LAYER_WX;
+                    end if;
+
+                when LAYER_WX =>
+                    -- * Y(j) = Y(j) + w * x ; j = (0 .. # neurons)
+                    Y_YPXW(to_integer(NRN_SEL1)) <= resize(Y_YPXW(to_integer(NRN_SEL1)) + m, fixedm_t'high, fixedm_t'low);
+                    
+                    -- * Calculate m again
+                    m <= to_sfixed(data_rd0, fixed_t'high, fixed_t'low) * input_buf(to_integer(W_SEL0));
+                     
                     if WEIGHTS_EXH = '1' then
-                        WEIGHT_SELECT <= to_unsigned(0, WEIGHT_SELECT'length);
-                        NEURON_SELECT <= NEURON_SELECT + 1;
+                        W_SEL0 <= to_unsigned(0, W_SEL0'length);
+                        NRN_SEL0 <= NRN_SEL0 + 1;
+                        if NEURONS_EXH = '1' then
+                            sw_resize <= '1';
+                        end if;
                     else
-                        WEIGHT_SELECT <= WEIGHT_SELECT + 1;
+                        W_SEL0 <= W_SEL0 + 1;
                     end if;
 
-                    if NEURONS_EXH = '1' AND WEIGHTS_EXH = '1' then
-                        layer_state <= LAYER_MUL_BUF;
+                    if sw_resize = '1' then
+                        layer_state <= LAYER_WX_RESIZE;
                     end if;
-                when LAYER_MUL_BUF =>
+
+                when LAYER_WX_RESIZE =>
 
                     for i in 0 to NUM_NEURONS - 1 loop
-                        Y(i) <= resize(Y_YPXDATA(i), fixed_t'high, fixed_t'low);
+                        activation_buf(i) <= resize(Y_YPXW(i), fixed_t'high, fixed_t'low);
                     end loop;
-                    
                     layer_state <= LAYER_BIAS;
-                    NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
+                    NRN_SEL0 <= to_unsigned(0,NRN_SEL0'length);
 
                 when LAYER_BIAS =>
                     -- * Add the bias to the mul. output
-                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + to_sfixed(data_rea1,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
+                    activation_buf(to_integer(NRN_SEL0)) <= resize(activation_buf(to_integer(NRN_SEL0)) + to_sfixed(data_rd2,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
 
                     -- * If input sel. is exhausted(reached max index) switch to next layer
                     if NEURONS_EXH = '1' then
                         -- * Reset the neuron selection index for activation
-                        NEURON_SELECT <= to_unsigned(0, NEURON_SELECT'length);
+                        NRN_SEL0 <= to_unsigned(0, NRN_SEL0'length);
                         -- * Disable increment addr.
                         incr_addr <= '0';
                         -- * Disable read ROM
@@ -269,23 +293,23 @@ begin
                         -- * Switch to activation state
                         layer_state <= LAYER_ACTIVATION;
                     else
-                        NEURON_SELECT <= NEURON_SELECT + 1;
+                        NRN_SEL0 <= NRN_SEL0 + 1;
                     end if;
 
                 when LAYER_ACTIVATION =>
                      -- * ReLU: Y(i) <- max(Y(i), 0.0);
-                     if Y(to_integer(NEURON_SELECT)) < to_fixed_t(0.0) then
-                        Y(to_integer(NEURON_SELECT)) <= to_fixed_t(0.0);
+                     if activation_buf(to_integer(NRN_SEL0)) < to_fixed_t(0.0) then
+                        activation_buf(to_integer(NRN_SEL0)) <= to_fixed_t(0.0);
                     end if;
 
                     if NEURONS_EXH = '1' then
                         layer_state <= LAYER_OUTPUT;
                     else
-                        NEURON_SELECT <= NEURON_SELECT + 1;
+                        NRN_SEL0 <= NRN_SEL0 + 1;
                     end if;
                 when LAYER_OUTPUT =>
                     -- * Output buffer
-                    ACTIVATIONS <= Y;
+                    ACTIVATIONS <= activation_buf;
                     -- * Assert finish for one cycle(reset on IDLE)
                     FINISHED <= '1';
                     -- * Not busy anymore
@@ -317,82 +341,97 @@ begin
                     addr_rea <= std_logic_vector(unsigned(addr_rea) + 1);
                 end if;
 
-                data_rea1 <= data_rea0;
-                data_rea2 <= data_rea1;
+                
+                -- * Read data SR logic
+                data_rd1 <= data_rd0;
+                data_rd2 <= data_rd1;
+
+                -- * Weight&Neuron selection SR logic
+                W_SEL1 <= W_SEL0;
+                NRN_SEL1 <= NRN_SEL0;
 
                 case layer_state is
                 when LAYER_IDLE =>
                     FINISHED <= '0';
+
                     if (start = '1') and (S_BUSY = '0') then
                         S_BUSY <= '1';
                         -- * Reset the address to 0
                         addr_rea <= (others=>'0');
                         -- * Input buffer
-                        X <= INPUTS;
+                        input_buf <= INPUTS;
                         -- * Enable read ROM for port A
                         en_rea <= '1';
                         -- * Start incrementing the address
                         incr_addr <= '1';
-                    end if;
-                    -- * 2 cycles after en_rea is asserted, switch to mult. state.(BROM latency is 2, fixed for now)
-                    if start2 = '1' then
-                        -- * Reset the neuron and weight sel. index. It'll start from 0,0
-                        NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
-                        WEIGHT_SELECT <= to_unsigned(0,WEIGHT_SELECT'length);
-                        Y_YPXDATA <= (others=>to_fixed_mul_t(0.0));
-                        layer_state <= LAYER_MUL;
-                    end if;
-                when LAYER_MUL =>
-                     -- * Accumulate(dot prod.) in the Y vector
-                    -- * Y(i) = Y(i) + X(i) * W_i (i = 0 ... INPUT_WIDTH - 1)
-                    -- MUL_BUFFER(to_integer(NEURON_SELECT)) <= resize(MUL_BUFFER(to_integer(NEURON_SELECT)) + resize(X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0,-- fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low),fixed_t'high,fixed_t'low);
-                    Y_YPXDATA(to_integer(NEURON_SELECT)) <= 
-                        resize(
-                            Y_YPXDATA(to_integer(NEURON_SELECT)) 
-                            +
-                            -- X * data 
-                            X(to_integer(WEIGHT_SELECT)) * to_sfixed(data_rea0, fixed_t'high, fixed_t'low),
-                            FP_MUL_LEFT_INDEX, FP_MUL_RIGHT_INDEX);
-
-                    if WEIGHTS_EXH = '1' then
-                        WEIGHT_SELECT <= to_unsigned(0, WEIGHT_SELECT'length);
-                        NEURON_SELECT <= NEURON_SELECT + 1;
-                    else
-                        WEIGHT_SELECT <= WEIGHT_SELECT + 1;
+                        -- * Reset weight selection because we need for start3
+                        W_SEL0 <= to_unsigned(0, W_SEL0'length);
+                        NRN_SEL0 <= to_unsigned(0, NRN_SEL0'length);
                     end if;
 
-                    if NEURONS_EXH = '1' AND WEIGHTS_EXH = '1' then
-                        layer_state <= LAYER_MUL_BUF;
+                    if (start3 = '1') and (S_BUSY = '1') then
+                        -- * Reset accumulation buffer
+                        Y_YPXW <= (others=>to_fixed_mul_t(0.0));
+                        m <= to_sfixed(data_rd0, fixed_t'high, fixed_t'low) * input_buf(to_integer(W_SEL0));
+                        -- * Increase weight selection for the next calculation
+                        W_SEL0 <= W_SEL0 + 1;
+                        sw_resize <= '0';
+                        -- * Switch to next state
+                        layer_state <= LAYER_WX;
                     end if;
-                when LAYER_MUL_BUF =>
+
+                when LAYER_WX =>
+                    -- * Y(j) = Y(j) + w * x ; j = (0 .. # neurons)
+                    Y_YPXW(to_integer(NRN_SEL1)) <= resize(Y_YPXW(to_integer(NRN_SEL1)) + m, fixedm_t'high, fixedm_t'low);
                     
+                    -- * Calculate m again
+                    m <= to_sfixed(data_rd0, fixed_t'high, fixed_t'low) * input_buf(to_integer(W_SEL0));
+                     
+                    if WEIGHTS_EXH = '1' then
+                        W_SEL0 <= to_unsigned(0, W_SEL0'length);
+                        NRN_SEL0 <= NRN_SEL0 + 1;
+                        if NEURONS_EXH = '1' then
+                            sw_resize <= '1';
+                        end if;
+                    else
+                        W_SEL0 <= W_SEL0 + 1;
+                    end if;
+
+                    if sw_resize = '1' then
+                        layer_state <= LAYER_WX_RESIZE;
+                    end if;
+
+                when LAYER_WX_RESIZE =>
+
                     for i in 0 to NUM_NEURONS - 1 loop
-                        Y(i) <= resize(Y_YPXDATA(i), fixed_t'high, fixed_t'low);
+                        activation_buf(i) <= resize(Y_YPXW(i), fixed_t'high, fixed_t'low);
                     end loop;
                     layer_state <= LAYER_BIAS;
-                    NEURON_SELECT <= to_unsigned(0,NEURON_SELECT'length);
+                    NRN_SEL0 <= to_unsigned(0,NRN_SEL0'length);
 
                 when LAYER_BIAS =>
                     -- * Add the bias to the mul. output
-                    Y(to_integer(NEURON_SELECT)) <= resize(Y(to_integer(NEURON_SELECT)) + to_sfixed(data_rea1,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
+                    activation_buf(to_integer(NRN_SEL0)) <= resize(activation_buf(to_integer(NRN_SEL0)) + to_sfixed(data_rd2,fixed_t'high,fixed_t'low),fixed_t'high, fixed_t'low);
 
                     -- * If input sel. is exhausted(reached max index) switch to next layer
                     if NEURONS_EXH = '1' then
+                        -- * Reset the neuron selection index for activation
+                        NRN_SEL0 <= to_unsigned(0, NRN_SEL0'length);
                         -- * Disable increment addr.
                         incr_addr <= '0';
                         -- * Disable read ROM
                         en_rea <= '0';
-                        -- * Switch to output state(we don't have any activation logic for 'linear')
+                        -- * Switch to activation state
                         layer_state <= LAYER_OUTPUT;
                     else
-                        NEURON_SELECT <= NEURON_SELECT + 1;
+                        NRN_SEL0 <= NRN_SEL0 + 1;
                     end if;
 
                 when LAYER_ACTIVATION =>
                      
                 when LAYER_OUTPUT =>
                     -- * Output buffer
-                    ACTIVATIONS <= Y;
+                    ACTIVATIONS <= activation_buf;
                     -- * Assert finish for one cycle(reset on IDLE)
                     FINISHED <= '1';
                     -- * Not busy anymore
