@@ -24,6 +24,7 @@ package types is
     
     -- ! Crashes Vivado XSim if used within vectors or matrices
     subtype fixed_t is sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
+    subtype fixedm_t is sfixed(FP_MUL_LEFT_INDEX downto FP_MUL_RIGHT_INDEX);
     
     type fixed_vector_t is array(natural range <>) of sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);
     type fixed_matrix_t is array(natural range <>,natural range <>) of sfixed(FP_INTEGER_BITS downto -FP_FRACTIONAL_BITS);

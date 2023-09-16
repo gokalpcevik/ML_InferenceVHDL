@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="CFD_Model_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="CFD_Model_tb" />
+            <top_module name="types" />
+            <top_module name="vcomponents" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.283333 us"></ZoomStartTime>
+      <ZoomEndTime time="11.943334 us"></ZoomEndTime>
+      <Cursor1Time time="10.000000 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="127"></NameColumnWidth>
+      <ValueColumnWidth column_width="315"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="11" />
+   <wvobject fp_name="/CFD_Model_tb/SysCLK" type="logic">
+      <obj_property name="ElementShortName">SysCLK</obj_property>
+      <obj_property name="ObjectShortName">SysCLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/RESETN" type="logic">
+      <obj_property name="ElementShortName">RESETN</obj_property>
+      <obj_property name="ObjectShortName">RESETN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/START" type="logic">
+      <obj_property name="ElementShortName">START</obj_property>
+      <obj_property name="ObjectShortName">START</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/FINISHED" type="logic">
+      <obj_property name="ElementShortName">FINISHED</obj_property>
+      <obj_property name="ObjectShortName">FINISHED</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/BUSY" type="logic">
+      <obj_property name="ElementShortName">BUSY</obj_property>
+      <obj_property name="ObjectShortName">BUSY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/INPUTS" type="array">
+      <obj_property name="ElementShortName">INPUTS[7:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">INPUTS[7:0][2:-15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/PRED_OUTPUT" type="array">
+      <obj_property name="ElementShortName">PRED_OUTPUT[3:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">PRED_OUTPUT[3:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/C_CLOCK_PERIOD" type="other">
+      <obj_property name="ElementShortName">C_CLOCK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">C_CLOCK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y" type="array">
+      <obj_property name="ElementShortName">L1_Y[14:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">L1_Y[14:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[14]" type="array">
+         <obj_property name="ElementShortName">[14][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[14][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[13]" type="array">
+         <obj_property name="ElementShortName">[13][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[13][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[12]" type="array">
+         <obj_property name="ElementShortName">[12][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[12][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[11]" type="array">
+         <obj_property name="ElementShortName">[11][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[11][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[10]" type="array">
+         <obj_property name="ElementShortName">[10][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[10][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[9]" type="array">
+         <obj_property name="ElementShortName">[9][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[9][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[8]" type="array">
+         <obj_property name="ElementShortName">[8][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[8][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[7]" type="array">
+         <obj_property name="ElementShortName">[7][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[7][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[6]" type="array">
+         <obj_property name="ElementShortName">[6][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[6][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[5]" type="array">
+         <obj_property name="ElementShortName">[5][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[5][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[4]" type="array">
+         <obj_property name="ElementShortName">[4][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[4][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[3]" type="array">
+         <obj_property name="ElementShortName">[3][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[3][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[2]" type="array">
+         <obj_property name="ElementShortName">[2][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[2][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[1]" type="array">
+         <obj_property name="ElementShortName">[1][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[1][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L1_Y[0]" type="array">
+         <obj_property name="ElementShortName">[0][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[0][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y" type="array">
+      <obj_property name="ElementShortName">L2_Y[14:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">L2_Y[14:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[14]" type="array">
+         <obj_property name="ElementShortName">[14][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[14][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[13]" type="array">
+         <obj_property name="ElementShortName">[13][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[13][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[12]" type="array">
+         <obj_property name="ElementShortName">[12][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[12][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[11]" type="array">
+         <obj_property name="ElementShortName">[11][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[11][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[10]" type="array">
+         <obj_property name="ElementShortName">[10][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[10][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[9]" type="array">
+         <obj_property name="ElementShortName">[9][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[9][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[8]" type="array">
+         <obj_property name="ElementShortName">[8][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[8][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[7]" type="array">
+         <obj_property name="ElementShortName">[7][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[7][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[6]" type="array">
+         <obj_property name="ElementShortName">[6][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[6][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[5]" type="array">
+         <obj_property name="ElementShortName">[5][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[5][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[4]" type="array">
+         <obj_property name="ElementShortName">[4][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[4][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[3]" type="array">
+         <obj_property name="ElementShortName">[3][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[3][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[2]" type="array">
+         <obj_property name="ElementShortName">[2][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[2][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[1]" type="array">
+         <obj_property name="ElementShortName">[1][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[1][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L2_Y[0]" type="array">
+         <obj_property name="ElementShortName">[0][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[0][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L3_Y" type="array">
+      <obj_property name="ElementShortName">L3_Y[3:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">L3_Y[3:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L3_Y[3]" type="array">
+         <obj_property name="ElementShortName">[3][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[3][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L3_Y[2]" type="array">
+         <obj_property name="ElementShortName">[2][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[2][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L3_Y[1]" type="array">
+         <obj_property name="ElementShortName">[1][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[1][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/CFD_Model_tb/cfd_model_inst/L3_Y[0]" type="array">
+         <obj_property name="ElementShortName">[0][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[0][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

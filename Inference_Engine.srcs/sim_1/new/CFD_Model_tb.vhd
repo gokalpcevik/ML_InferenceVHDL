@@ -14,16 +14,18 @@ architecture testbench of CFD_Model_tb is
     signal FINISHED: std_logic := '0';
     signal BUSY:     std_logic := '0';
 
-    signal INPUTS:      fixed_vector_t(CFD_MODEL_INPUT_WIDTH - 1 downto 0)  := (others=>to_fixed_t(1.0));
+    signal INPUTS:      fixed_vector_t(CFD_MODEL_INPUT_WIDTH - 1 downto 0)  := (others=>to_fixed_t(0.5));
     signal PRED_OUTPUT: fixed_vector_t(CFD_MODEL_L3_NUM_NEURONS - 1 downto 0) := (others=>to_fixed_t(0.0));
 
 begin
     SysClk <= not SysClk after (C_CLOCK_PERIOD / 2);
 
+
     process
       begin 
         RESETN <= '1' after 4 ns;
         START <= '1' after 6 ns, '0' after 8.5 ns;
+        report "LOG2(15):" &to_string(clog2(15)) severity warning;
         wait;
     end process;
 

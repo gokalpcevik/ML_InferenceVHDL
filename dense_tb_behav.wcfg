@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="dense_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="dense_tb" />
+            <top_module name="types" />
+            <top_module name="vcomponents" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="9,806.333 ns"></ZoomStartTime>
+      <ZoomEndTime time="10,038.734 ns"></ZoomEndTime>
+      <Cursor1Time time="10,000.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="127"></NameColumnWidth>
+      <ValueColumnWidth column_width="319"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="20" />
+   <wvobject fp_name="/dense_tb/SysClk" type="logic">
+      <obj_property name="ElementShortName">SysClk</obj_property>
+      <obj_property name="ObjectShortName">SysClk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/RESETN" type="logic">
+      <obj_property name="ElementShortName">RESETN</obj_property>
+      <obj_property name="ObjectShortName">RESETN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/START" type="logic">
+      <obj_property name="ElementShortName">START</obj_property>
+      <obj_property name="ObjectShortName">START</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/FINISHED" type="logic">
+      <obj_property name="ElementShortName">FINISHED</obj_property>
+      <obj_property name="ObjectShortName">FINISHED</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/BUSY" type="logic">
+      <obj_property name="ElementShortName">BUSY</obj_property>
+      <obj_property name="ObjectShortName">BUSY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/inputs" type="array">
+      <obj_property name="ElementShortName">inputs[2:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">inputs[2:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/activations" type="array">
+      <obj_property name="ElementShortName">activations[2:0][2:-15]</obj_property>
+      <obj_property name="ObjectShortName">activations[2:0][2:-15]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/dense_tb/activations[2]" type="array">
+         <obj_property name="ElementShortName">[2][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[2][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/dense_tb/activations[1]" type="array">
+         <obj_property name="ElementShortName">[1][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[1][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/dense_tb/activations[0]" type="array">
+         <obj_property name="ElementShortName">[0][2:-15]</obj_property>
+         <obj_property name="ObjectShortName">[0][2:-15]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/C_CLOCK_PERIOD" type="other">
+      <obj_property name="ElementShortName">C_CLOCK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">C_CLOCK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/C_INPUT_WIDTH" type="other">
+      <obj_property name="ElementShortName">C_INPUT_WIDTH</obj_property>
+      <obj_property name="ObjectShortName">C_INPUT_WIDTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/C_NUM_NEURONS" type="other">
+      <obj_property name="ElementShortName">C_NUM_NEURONS</obj_property>
+      <obj_property name="ObjectShortName">C_NUM_NEURONS</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/layer_state" type="other">
+      <obj_property name="ElementShortName">layer_state</obj_property>
+      <obj_property name="ObjectShortName">layer_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/Y_YPXW" type="array">
+      <obj_property name="ElementShortName">Y_YPXW[2:0][5:-30]</obj_property>
+      <obj_property name="ObjectShortName">Y_YPXW[2:0][5:-30]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">30</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/dense_tb/dense_inst/Y_YPXW[2]" type="array">
+         <obj_property name="ElementShortName">[2][5:-30]</obj_property>
+         <obj_property name="ObjectShortName">[2][5:-30]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">30</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/dense_tb/dense_inst/Y_YPXW[1]" type="array">
+         <obj_property name="ElementShortName">[1][5:-30]</obj_property>
+         <obj_property name="ObjectShortName">[1][5:-30]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">30</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/dense_tb/dense_inst/Y_YPXW[0]" type="array">
+         <obj_property name="ElementShortName">[0][5:-30]</obj_property>
+         <obj_property name="ObjectShortName">[0][5:-30]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">30</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/m" type="array">
+      <obj_property name="ElementShortName">m[5:-30]</obj_property>
+      <obj_property name="ObjectShortName">m[5:-30]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">30</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/data_rd0" type="array">
+      <obj_property name="ElementShortName">data_rd0[17:0]</obj_property>
+      <obj_property name="ObjectShortName">data_rd0[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/data_rd1" type="array">
+      <obj_property name="ElementShortName">data_rd1[17:0]</obj_property>
+      <obj_property name="ObjectShortName">data_rd1[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/data_rd2" type="array">
+      <obj_property name="ElementShortName">data_rd2[17:0]</obj_property>
+      <obj_property name="ObjectShortName">data_rd2[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">15</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/NRN_SEL0" type="array">
+      <obj_property name="ElementShortName">NRN_SEL0[5:0]</obj_property>
+      <obj_property name="ObjectShortName">NRN_SEL0[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/NRN_SEL1" type="array">
+      <obj_property name="ElementShortName">NRN_SEL1[5:0]</obj_property>
+      <obj_property name="ObjectShortName">NRN_SEL1[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/W_SEL0" type="array">
+      <obj_property name="ElementShortName">W_SEL0[5:0]</obj_property>
+      <obj_property name="ObjectShortName">W_SEL0[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/dense_tb/dense_inst/W_SEL1" type="array">
+      <obj_property name="ElementShortName">W_SEL1[5:0]</obj_property>
+      <obj_property name="ObjectShortName">W_SEL1[5:0]</obj_property>
+   </wvobject>
+</wave_config>

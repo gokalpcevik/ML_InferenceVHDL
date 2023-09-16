@@ -48,11 +48,13 @@ architecture RTL of dense is
     -- ! Do not change this
     CONSTANT C_READ_LATENCY: INTEGER := 2;
     -- * DSP
-    CONSTANT C_DSP_INPUT_WIDTH_A: INTEGER := 18;
-    CONSTANT C_DSP_INPUT_WIDTH_B: INTEGER := 18;
-    CONSTANT C_DSP_OUTPUT_WIDTH: INTEGER := 48;
-    -- ! Do not change
-    CONSTANT C_DSP_LATENCY: INTEGER := 3;
+    -- CONSTANT C_DSP_INPUT_WIDTH_A: INTEGER := 18;
+    -- CONSTANT C_DSP_INPUT_WIDTH_B: INTEGER := 18;
+    -- CONSTANT C_DSP_OUTPUT_WIDTH: INTEGER := 48;
+    -- CONSTANT C_DSP_LATENCY: INTEGER := 3;
+
+    CONSTANT C_NEURON_SELECTION_INDEX_WIDTH: INTEGER := clog2(NUM_NEURONS);
+    CONSTANT C_WEIGHT_SELECTION_INDEX_WIDTH: INTEGER := clog2(INPUT_WIDTH);
 
     type layer_state_t is (LAYER_IDLE, LAYER_WX, LAYER_WX_RESIZE, LAYER_BIAS, LAYER_ACTIVATION, LAYER_OUTPUT);
     signal layer_state: layer_state_t := LAYER_IDLE;    
@@ -90,11 +92,11 @@ architecture RTL of dense is
     signal start3: std_logic := '0';
 
     -- * Signals to select elements from the weight matrix(or bias vector) and inputs
-    signal NRN_SEL0: unsigned(5 downto 0) := to_unsigned(0,6);
-    signal NRN_SEL1: unsigned(5 downto 0) := to_unsigned(0,6);
+    signal NRN_SEL0: unsigned(C_NEURON_SELECTION_INDEX_WIDTH - 1 downto 0) := to_unsigned(0,C_NEURON_SELECTION_INDEX_WIDTH);
+    signal NRN_SEL1: unsigned(C_NEURON_SELECTION_INDEX_WIDTH - 1 downto 0) := to_unsigned(0,C_NEURON_SELECTION_INDEX_WIDTH);
     
-    signal W_SEL0: unsigned(5 downto 0) := to_unsigned(0,6);
-    signal W_SEL1: unsigned(5 downto 0) := to_unsigned(0,6);
+    signal W_SEL0: unsigned(C_WEIGHT_SELECTION_INDEX_WIDTH - 1 downto 0) := to_unsigned(0,C_WEIGHT_SELECTION_INDEX_WIDTH);
+    signal W_SEL1: unsigned(C_WEIGHT_SELECTION_INDEX_WIDTH - 1 downto 0) := to_unsigned(0,C_WEIGHT_SELECTION_INDEX_WIDTH);
 
     signal sw_resize: std_logic := '0';
 
