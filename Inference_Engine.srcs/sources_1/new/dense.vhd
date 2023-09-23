@@ -149,7 +149,7 @@ begin
    );
 
 
-    /* MACC_MACRO_inst : MACC_MACRO
+   /* MACC_MACRO_inst : MACC_MACRO
    generic map (
       DEVICE => "7SERIES",  -- Target Device: "VIRTEX5", "7SERIES", "SPARTAN6" 
       LATENCY => C_DSP_LATENCY,         -- Desired clock cycle latency, 1-4

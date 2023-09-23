@@ -42,10 +42,19 @@ begin
       if RESETN = '0' then
         START_PREDICTION <= '0';
       else
+
+        if START = '1' then
+          BUSY <= '1';
+        elsif L3_FINISHED = '1' then
+          BUSY <= '0';
+        end if;
+
         START_PREDICTION <= START;
+        
         if START = '1' then
           X <= INPUTS;
         end if;
+
       end if;
     end if;
   end process;

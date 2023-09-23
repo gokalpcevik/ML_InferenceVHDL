@@ -2,7 +2,7 @@
 --Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2023.1 (win64) Build 3865809 Sun May  7 15:05:29 MDT 2023
---Date        : Thu Sep 14 19:59:01 2023
+--Date        : Thu Sep 21 02:31:35 2023
 --Host        : DESKTOP-6I3PQK8 running 64-bit major release  (build 9200)
 --Command     : generate_target top_bd.bd
 --Design      : top_bd
@@ -715,7 +715,7 @@ architecture STRUCTURE of top_bd is
     pred_irq : out STD_LOGIC;
     s00_axi_aclk : in STD_LOGIC;
     s00_axi_aresetn : in STD_LOGIC;
-    s00_axi_awaddr : in STD_LOGIC_VECTOR ( 5 downto 0 );
+    s00_axi_awaddr : in STD_LOGIC_VECTOR ( 7 downto 0 );
     s00_axi_awprot : in STD_LOGIC_VECTOR ( 2 downto 0 );
     s00_axi_awvalid : in STD_LOGIC;
     s00_axi_awready : out STD_LOGIC;
@@ -726,7 +726,7 @@ architecture STRUCTURE of top_bd is
     s00_axi_bresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
     s00_axi_bvalid : out STD_LOGIC;
     s00_axi_bready : in STD_LOGIC;
-    s00_axi_araddr : in STD_LOGIC_VECTOR ( 5 downto 0 );
+    s00_axi_araddr : in STD_LOGIC_VECTOR ( 7 downto 0 );
     s00_axi_arprot : in STD_LOGIC_VECTOR ( 2 downto 0 );
     s00_axi_arvalid : in STD_LOGIC;
     s00_axi_arready : out STD_LOGIC;
@@ -855,12 +855,12 @@ CFD_Model_AI: component top_bd_CFD_Model_MREF_0_0
      port map (
       pred_irq => CFD_Model_AI_pred_irq,
       s00_axi_aclk => processing_system7_0_FCLK_CLK0,
-      s00_axi_araddr(5 downto 0) => ps7_0_axi_periph_M00_AXI_ARADDR(5 downto 0),
+      s00_axi_araddr(7 downto 0) => ps7_0_axi_periph_M00_AXI_ARADDR(7 downto 0),
       s00_axi_aresetn => rst_ps7_0_50M_peripheral_aresetn(0),
       s00_axi_arprot(2 downto 0) => ps7_0_axi_periph_M00_AXI_ARPROT(2 downto 0),
       s00_axi_arready => ps7_0_axi_periph_M00_AXI_ARREADY,
       s00_axi_arvalid => ps7_0_axi_periph_M00_AXI_ARVALID,
-      s00_axi_awaddr(5 downto 0) => ps7_0_axi_periph_M00_AXI_AWADDR(5 downto 0),
+      s00_axi_awaddr(7 downto 0) => ps7_0_axi_periph_M00_AXI_AWADDR(7 downto 0),
       s00_axi_awprot(2 downto 0) => ps7_0_axi_periph_M00_AXI_AWPROT(2 downto 0),
       s00_axi_awready => ps7_0_axi_periph_M00_AXI_AWREADY,
       s00_axi_awvalid => ps7_0_axi_periph_M00_AXI_AWVALID,

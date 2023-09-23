@@ -214,7 +214,7 @@
             "value": "10.000000"
           },
           "PCW_ACT_FPGA0_PERIPHERAL_FREQMHZ": {
-            "value": "83.333336"
+            "value": "111.111115"
           },
           "PCW_ACT_FPGA1_PERIPHERAL_FREQMHZ": {
             "value": "10.000000"
@@ -274,7 +274,7 @@
             "value": "667"
           },
           "PCW_CLK0_FREQ": {
-            "value": "83333336"
+            "value": "111111115"
           },
           "PCW_CLK1_FREQ": {
             "value": "10000000"
@@ -370,10 +370,10 @@
             "value": "1"
           },
           "PCW_FCLK0_PERIPHERAL_CLKSRC": {
-            "value": "ARM PLL"
+            "value": "IO PLL"
           },
           "PCW_FPGA0_PERIPHERAL_FREQMHZ": {
-            "value": "85"
+            "value": "110"
           },
           "PCW_FPGA_FCLK0_ENABLE": {
             "value": "1"
@@ -1605,7 +1605,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "83333336",
+                "value": "111111115",
                 "value_src": "user_prop"
               },
               "ID_WIDTH": {
@@ -1613,7 +1613,7 @@
                 "value_src": "constant"
               },
               "ADDR_WIDTH": {
-                "value": "6",
+                "value": "8",
                 "value_src": "auto"
               },
               "AWUSER_WIDTH": {
@@ -1710,7 +1710,7 @@
               "AWADDR": {
                 "physical_name": "s00_axi_awaddr",
                 "direction": "I",
-                "left": "5",
+                "left": "7",
                 "right": "0"
               },
               "AWPROT": {
@@ -1764,7 +1764,7 @@
               "ARADDR": {
                 "physical_name": "s00_axi_araddr",
                 "direction": "I",
-                "left": "5",
+                "left": "7",
                 "right": "0"
               },
               "ARPROT": {
@@ -1832,7 +1832,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "83333336",
+                "value": "111111115",
                 "value_src": "user_prop"
               },
               "CLK_DOMAIN": {
