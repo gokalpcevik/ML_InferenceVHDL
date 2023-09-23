@@ -1,1 +1,2 @@
 # ML_InferenceVHDL 
+This is the Vivado VHDL project for the ML and FPGA accelerated CFD application. The hardware is exported to Vitis and inference is done via AXI-Lite and sent to the PC via UART. The drivers are in the other repo(https://github.com/gokalpcevik/ML_InferenceVHDL_ZynqSW)
